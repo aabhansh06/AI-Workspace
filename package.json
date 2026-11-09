@@ -1,0 +1,21 @@
+{
+  "name": "ai-workspace",
+  "version": "1.0.0",
+  "description": "A responsive AI chat workspace with Google Gemini streamed responses",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test",
+    "dev": "node --watch server.mjs"
+  },
+  "keywords": [
+    "ai",
+    "gemini",
+    "chat",
+    "workspace"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

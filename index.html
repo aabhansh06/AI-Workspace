@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AI Workspace — a private place to work with AI." />
+    <meta name="theme-color" content="#111214" />
+    <title>AI Workspace</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%238d7aff%22>✦</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.mjs"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Conversation sidebar">
+        <div class="brand-row">
+          <a class="brand" href="#" aria-label="AI Workspace home">
+            <span class="brand-mark" aria-hidden="true">✦</span>
+            <span><strong>workspace</strong><small>AI ASSISTANT</small></span>
+          </a>
+          <button class="icon-button mobile-close" id="close-sidebar" aria-label="Close menu">×</button>
+        </div>
+        <button class="new-chat-button" id="new-chat"><span aria-hidden="true">＋</span> New chat <kbd>Ctrl K</kbd></button>
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input id="conversation-search" type="search" placeholder="Search conversations" autocomplete="off" />
+          <kbd>/</kbd>
+        </label>
+        <div class="sidebar-section-heading">
+          <span>YOUR CHATS</span>
+          <button class="subtle-button" id="clear-conversations" title="Clear all chats">Clear</button>
+        </div>
+        <nav class="conversation-list" id="conversation-list" aria-label="Your conversations"></nav>
+        <p class="sidebar-empty" id="sidebar-empty">No conversations yet. Start a new chat.</p>
+        <div class="sidebar-footer">
+          <div class="connection-card">
+            <span class="status-dot" aria-hidden="true"></span>
+            <div><strong>Google Gemini</strong><small>Server-side AI provider</small></div>
+          </div>
+          <button class="profile-button" id="theme-toggle" aria-label="Toggle color theme">
+            <span class="avatar">Y</span>
+            <span class="profile-copy"><strong>Your workspace</strong><small>Personal space</small></span>
+            <span class="theme-icon" aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="icon-button menu-button" id="open-sidebar" aria-label="Open menu">☰</button>
+          <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="active-title">New chat</strong></div>
+          <div class="topbar-actions">
+            <span class="provider-pill" id="provider-status"><span class="status-dot" aria-hidden="true"></span> Checking Gemini…</span>
+            <button class="icon-button" id="help-button" aria-label="About this preview" title="About this preview">?</button>
+          </div>
+        </header>
+
+        <section class="conversation-view" aria-label="Chat">
+          <div class="welcome" id="welcome">
+            <div class="hero-mark" aria-hidden="true"><span>✦</span></div>
+            <p class="eyebrow">YOUR SPACE TO THINK</p>
+            <h1>What would you like<br class="desktop-break" /> to work on?</h1>
+            <p class="hero-description">A thoughtful workspace for your ideas, questions, and everyday work.</p>
+            <div class="suggestion-grid" aria-label="Try a prompt">
+              <button class="suggestion-card" data-prompt="Help me brainstorm ideas for a new project">
+                <span class="suggestion-icon violet">✧</span><span><strong>Brainstorm ideas</strong><small>Explore something new</small></span><span class="card-arrow">↗</span>
+              </button>
+              <button class="suggestion-card" data-prompt="Help me make a clear plan for my week">
+                <span class="suggestion-icon blue">▤</span><span><strong>Make a plan</strong><small>Turn goals into steps</small></span><span class="card-arrow">↗</span>
+              </button>
+              <button class="suggestion-card" data-prompt="Summarize the key points from my notes">
+                <span class="suggestion-icon amber">≡</span><span><strong>Summarize notes</strong><small>Find the main takeaways</small></span><span class="card-arrow">↗</span>
+              </button>
+              <button class="suggestion-card" data-prompt="Help me write a polished email">
+                <span class="suggestion-icon green">✎</span><span><strong>Write something</strong><small>Start with a first draft</small></span><span class="card-arrow">↗</span>
+              </button>
+            </div>
+            <div class="preview-notice"><span aria-hidden="true">ⓘ</span> Connect Gemini on this server to get streamed AI responses. Your history stays in this browser.</div>
+          </div>
+          <div class="message-list" id="message-list" aria-live="polite"></div>
+        </section>
+
+        <section class="composer-area" aria-label="Message composer">
+          <div class="model-row">
+            <span class="model-label"><span class="model-sparkle" aria-hidden="true">✦</span> Model</span>
+            <span class="model-unavailable" id="model-name">Checking model…</span>
+            <span class="model-row-spacer"></span>
+            <span class="local-label"><span class="status-dot" aria-hidden="true"></span> Saved locally</span>
+          </div>
+          <form class="composer" id="message-form">
+            <textarea id="message-input" rows="1" placeholder="Write a message — AI responses are not connected yet" aria-label="Write a message"></textarea>
+            <div class="composer-controls">
+              <span class="composer-hint">Enter to send <span>·</span> Shift + Enter for a new line</span>
+              <button class="stop-button" id="stop-generation" type="button" aria-label="Stop generating" hidden>■</button>
+              <button class="send-button" type="submit" aria-label="Send message"><span aria-hidden="true">↑</span></button>
+            </div>
+          </form>
+          <p class="disclaimer">Enter to send · Messages are saved locally. Prompts are sent to Google Gemini by your server.</p>
+        </section>
+      </main>
+
+      <aside class="details-panel" aria-label="Workspace details">
+        <div class="details-heading"><div><p class="eyebrow">WORKSPACE</p><h2>At a glance</h2></div><span class="details-sparkle" aria-hidden="true">✳</span></div>
+        <section class="detail-card setup-card">
+          <div class="card-heading"><span class="detail-icon blue">⌘</span><span class="tag">SETUP</span></div>
+          <h3>Connect your AI</h3>
+          <p>Paste a fresh Gemini API key here. The local server keeps it in memory only; it is not saved in this browser.</p>
+          <div class="setup-status" id="setup-status"><span class="status-dot" aria-hidden="true"></span> Checking server configuration…</div>
+          <form class="api-key-form" id="api-key-form">
+            <label for="api-key-input">Gemini API key</label>
+            <div class="api-key-controls">
+              <input id="api-key-input" name="apiKey" type="password" placeholder="Paste your rotated key" autocomplete="off" spellcheck="false" required minlength="20" maxlength="512" />
+              <button type="submit">Connect</button>
+            </div>
+            <small id="api-key-hint">Free-tier access is limited by Google’s model and project quotas.</small>
+            <div class="provider-links">
+              <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Get a fresh Gemini key ↗</a>
+              <a href="https://aistudio.google.com/rate-limit?timeRange=last-28-days" target="_blank" rel="noopener noreferrer">Check free quota ↗</a>
+            </div>
+          </form>
+        </section>
+        <section class="detail-card">
+          <div class="card-heading"><span class="detail-icon violet">◷</span><span class="tag">THIS SESSION</span></div>
+          <h3>Conversation activity</h3>
+          <div class="stat-row"><span>Conversations</span><strong id="conversation-count">0</strong></div>
+          <div class="stat-row"><span>Your messages</span><strong id="message-count">0</strong></div>
+        </section>
+        <section class="detail-card privacy-card">
+          <div class="card-heading"><span class="detail-icon green">◇</span><span class="tag">PRIVACY</span></div>
+          <h3>Your data stays here</h3>
+          <p>Your chat history stays in this browser. Prompts go to Google Gemini through the local server.</p>
+        </section>
+        <div class="details-footer"><span class="status-dot" aria-hidden="true"></span> All systems local</div>
+      </aside>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  </body>
+</html>
